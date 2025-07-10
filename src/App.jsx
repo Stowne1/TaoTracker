@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [taoData, setTaoData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTao = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=bittensor&vs_currencies=usd&include_24hr_change=true"
+        );
+        const data = await res.json();
+        setTaoData(data.bittensor);
+      } catch (err) {
+        setError("Failed to fetch data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTao();
+    const interval = setInterval(fetchTao, 10000); // refresh every 10s
+    return () => clearInterval(interval);
+  }, []);
+
+  if (loading) return <div className="p-4">Loading...</div>;
+  if (error) return <div className="p-4 text-red-500">{error}</div>;
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
+      <h1 className="text-3xl font-bold mb-4">$TAO Tracker</h1>
+      <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <div className="text-xl mb-2">Price: ${taoData.usd}</div>
+        <div>
+          24h Change:{" "}
+          <span className={taoData.usd_24h_change >= 0 ? "text-green-400" : "text-red-400"}>
+            {taoData.usd_24h_change.toFixed(2)}%
+          </span>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
