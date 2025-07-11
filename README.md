@@ -1,3 +1,3 @@
 # $taotracker
 
-A responsive crypto dashboard for tracking $TAO and major cryptocurrencies...
+A responsive crypto dashboard for tracking $TAO cryptocurrency
