@@ -10,11 +10,12 @@ it('renders $TAO Price Chart heading', () => {
   expect(heading).toBeInTheDocument();
 });
 
-// Test: loading spinner appears
-it('shows loading spinner initially', () => {
+// Test: loading skeleton appears initially
+it('shows loading skeleton for chart initially', () => {
   render(<App />);
-  const loading = screen.getByText(/loading chart/i);
-  expect(loading).toBeInTheDocument();
+  // Look for the chart skeleton by class
+  const skeleton = document.querySelector('.animate-pulse');
+  expect(skeleton).toBeInTheDocument();
 });
 
 // Test: timeframe selector buttons render
@@ -32,7 +33,7 @@ it('updates active button when a timeframe is clicked', () => {
   render(<App />);
   const btn14d = screen.getByText('14d');
   fireEvent.click(btn14d);
-  expect(btn14d).toHaveClass('bg-indigo-500');
+  expect(btn14d.className).toMatch(/bg-indigo-600/);
 });
 
 // Test: buttons remain enabled and responsive
@@ -40,8 +41,8 @@ it('timeframe buttons remain responsive', () => {
   render(<App />);
   const btn30d = screen.getByText('30d');
   fireEvent.click(btn30d);
-  expect(btn30d).toHaveClass('bg-indigo-500');
+  expect(btn30d.className).toMatch(/bg-indigo-600/);
   const btn7d = screen.getByText('7d');
   fireEvent.click(btn7d);
-  expect(btn7d).toHaveClass('bg-indigo-500');
+  expect(btn7d.className).toMatch(/bg-indigo-600/);
 }); 
