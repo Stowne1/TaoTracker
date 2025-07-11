@@ -28,6 +28,14 @@ it('renders all timeframe selector buttons', () => {
   expect(screen.getByText('1yr')).toBeInTheDocument();
 });
 
+// Test: 24h range and ATH elements render
+it('renders 24h range and all-time high segments', () => {
+  render(<App />);
+  // These will be skeletons or N/A on first render, but the elements should exist
+  expect(screen.getByText(/24h Range/i)).toBeInTheDocument();
+  expect(screen.getByText(/All-Time High/i)).toBeInTheDocument();
+});
+
 // Test: clicking a timeframe button updates the active state
 it('updates active button when a timeframe is clicked', () => {
   render(<App />);
